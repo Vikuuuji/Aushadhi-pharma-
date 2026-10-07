@@ -1,0 +1,64 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE IF NOT EXISTS users (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ role TEXT NOT NULL CHECK(role IN ('ADMIN','RETAILER')),
+ username TEXT UNIQUE,
+ password_hash TEXT NOT NULL,
+ store_name TEXT,
+ owner_name TEXT,
+ mobile TEXT,
+ email TEXT UNIQUE,
+ gstin TEXT,
+ drug_license TEXT,
+ address TEXT,
+ verified INTEGER NOT NULL DEFAULT 0,
+ created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS products (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ name TEXT NOT NULL,
+ salt TEXT,
+ category TEXT,
+ packing TEXT,
+ mrp REAL NOT NULL DEFAULT 0,
+ wholesale_price REAL NOT NULL DEFAULT 0,
+ scheme TEXT,
+ moq INTEGER NOT NULL DEFAULT 1,
+ stock INTEGER NOT NULL DEFAULT 0,
+ hsn TEXT,
+ gst_rate REAL NOT NULL DEFAULT 0,
+ image_url TEXT,
+ active INTEGER NOT NULL DEFAULT 1,
+ created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS orders (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ order_no TEXT UNIQUE NOT NULL,
+ retailer_id INTEGER,
+ store_name TEXT NOT NULL,
+ mobile TEXT,
+ address TEXT,
+ subtotal REAL NOT NULL DEFAULT 0,
+ discount REAL NOT NULL DEFAULT 0,
+ tax REAL NOT NULL DEFAULT 0,
+ total REAL NOT NULL DEFAULT 0,
+ status TEXT NOT NULL DEFAULT 'PENDING',
+ notes TEXT,
+ created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY(retailer_id) REFERENCES users(id)
+);
+CREATE TABLE IF NOT EXISTS order_items (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ order_id INTEGER NOT NULL,
+ product_id INTEGER NOT NULL,
+ product_name TEXT NOT NULL,
+ qty INTEGER NOT NULL,
+ unit_price REAL NOT NULL,
+ line_total REAL NOT NULL,
+ FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE,
+ FOREIGN KEY(product_id) REFERENCES products(id)
+);
+CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
+CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
+CREATE INDEX IF NOT EXISTS idx_orders_retailer ON orders(retailer_id);
