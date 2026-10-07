@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      BUSINESS_NAME: ${BUSINESS_NAME:-Aushadhi Pharma}
+      BUSINESS_PHONE: ${BUSINESS_PHONE:-7827006900}
+      BUSINESS_EMAIL: ${BUSINESS_EMAIL:-sr.aushadipharma@gmail.com}
+      BUSINESS_ADDRESS: ${BUSINESS_ADDRESS:-R. Park, New Delhi - 110041}
+      WHATSAPP_NUMBER: ${WHATSAPP_NUMBER:-917827006900}
+    volumes:
+      - ./db:/app/db
