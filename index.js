@@ -15,7 +15,8 @@ import { fileURLToPath } from 'url';
 dotenv.config();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
-const dbDir = path.join(root, 'db');
+const dbDir = root;
+
 fs.mkdirSync(dbDir, { recursive: true });
 const db = new Database(path.join(dbDir, 'aushadhi.db'));
 db.pragma('foreign_keys = ON');
