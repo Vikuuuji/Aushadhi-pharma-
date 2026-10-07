@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';
 
 dotenv.config();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, '..');
+const root = __dirname,
 const dbDir = root;
 
 fs.mkdirSync(dbDir, { recursive: true });
